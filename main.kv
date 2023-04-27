@@ -1,0 +1,264 @@
+#:kivy 2.1.0
+#:import hex kivy.utils.get_color_from_hex
+#:import Clipboard kivy.core.clipboard.Clipboard
+#:set main_color '1a1a1a'
+#:set sec_color '212121'
+#:set third_color '303030'
+#:set accent_color 'e3e3e3'
+#:set complement_color '919191'
+
+<UI>:
+    do_default_tab: False
+    tab_pos: 'top_mid'
+    tab_width: self.width / 3
+
+    Tab:
+        text: 'Learn'
+        BoxLayoutCanvas:
+            orientation: 'vertical'
+            AnchorLayoutCanvas:
+                size_hint_y: .8
+                BoxLayoutCanvas:
+                    #bg_color: 1,0,0,1
+                    size_hint: None, None
+                    size: 300, 330
+                    orientation: 'vertical'
+                    RoundedButton:
+                        text: 'Copy'
+                        font_size: 10
+                        size: 45, 23
+                        pos_hint: {'left': .5}
+                        radius: 8
+                        on_release: Clipboard.copy(learn_original.text)
+                    LabelCanvas:
+                        #bg_color: 1,0,0,1
+                        id: learn_original
+                        font_size: 16
+                        color: accent_color
+                        size_hint_y: 0.1
+                        text: 'Word'
+                    LabelCanvas:
+                        valign: 'center'
+                        halign: 'left'
+                        text_size: self.size
+                        text: 'Transcription'
+                        size_hint_y: 0.11
+                    TextInput:
+                        id: learn_transcription
+                        size_hint_y: 0.09
+                        readonly: True
+                        font_name: 'Arial'
+                    LabelCanvas:
+                        valign: 'center'
+                        halign: 'left'
+                        text_size: self.size
+                        text: 'Translation'
+                        size_hint_y: 0.11
+                    TextInput:
+                        id: learn_translation
+                        size_hint_y: 0.09
+                        readonly: True
+                    LabelCanvas:
+                        valign: 'center'
+                        halign: 'left'
+                        text_size: self.size
+                        text: 'Examples'
+                        size_hint_y: 0.11
+                    TextInput:
+                        id: learn_examples
+                        do_wrap: True
+                        size_hint_y: 0.29
+                        readonly: True
+
+            AnchorLayout:
+                size_hint_y: .2
+                #bg_color: 1,0,0,1
+                BoxLayoutCanvas:
+                    size_hint: None, None
+                    size: self.minimum_size
+                    #bg_color: 1,0,0,1
+                    spacing: 30
+                    RoundedButton:
+                        text: 'Prev'
+                        on_release: app.get_word('prev')
+                    RoundedToggleButton:
+                        text: 'Hint'
+                        on_press: app.hint('show') if self.state == 'down' else app.hint('hide')
+                    RoundedButton:
+                        text: 'Next'
+                        on_release: app.get_word('next')
+    Tab:
+        text: 'Search'
+        BoxLayoutCanvas:
+            orientation: 'vertical'
+            AnchorLayoutCanvas:
+                size_hint_y: .8
+                BoxLayoutCanvas:
+                    size_hint: None, None
+                    size: 300, 330
+                    orientation: 'vertical'
+                    Widget:
+                        size_hint_y: 0.1
+                    TextInput:
+                        id: search_field
+                        hint_text: 'keyword or "0" - first, "-1" - last'
+                        size_hint_y: 0.1
+                    LabelCanvas:
+                        id: search_info
+                        color: (1, .2, .2, 1)
+                        valign: 'center'
+                        halign: 'center'
+                        text_size: self.size
+                        text: 'Not found'
+                        opacity: 0
+                        size_hint_y: 0.8
+            AnchorLayout:
+                size_hint_y: .2
+                RoundedButton:
+                    text: 'Search'
+                    on_release: app.search()
+    Tab:
+        text: 'Add'
+        BoxLayoutCanvas:
+            orientation: 'vertical'
+            AnchorLayoutCanvas:
+                size_hint_y: .8
+                BoxLayoutCanvas:
+                    size_hint: None, None
+                    size: 300, 353
+                    orientation: 'vertical'
+                    BoxLayout:
+                        size_hint_y: 0.11
+                        LabelCanvas:
+                            # bg_color: 1,0,0,1
+                            valign: 'center'
+                            halign: 'left'
+                            text_size: self.size
+                            text: 'Original'
+                        LabelCanvas:
+                            id: add_exists
+                            color: (1, .2, .2, 1)
+                            valign: 'center'
+                            halign: 'right'
+                            text_size: self.size
+                            text: 'Already exists!'
+                            opacity: 0
+                    TextInput:
+                        id: add_orig
+                        hint_text: 'Mark my words'
+                        size_hint_y: 0.09
+                    LabelCanvas:
+                        valign: 'center'
+                        halign: 'left'
+                        text_size: self.size
+                        text: 'Translation'
+                        size_hint_y: 0.11
+                    TextInput:
+                        id: add_translation
+                        hint_text: 'Запомни мои слова'
+                        size_hint_y: 0.09
+                    LabelCanvas:
+                        valign: 'center'
+                        halign: 'left'
+                        text_size: self.size
+                        text: 'Transcription'
+                        size_hint_y: 0.11
+                    TextInput:
+                        id: add_transcription
+                        hint_text: 'märk mī wərds'
+                        size_hint_y: 0.09
+                        font_name: 'Arial'
+                    LabelCanvas:
+                        valign: 'center'
+                        halign: 'left'
+                        text_size: self.size
+                        text: 'Examples'
+                        size_hint_y: 0.11
+                    TextInput:
+                        id: add_examples
+                        hint_text: 'He will cause trouble - you mark my words!'
+                        do_wrap: False
+                        size_hint_y: 0.29
+
+            AnchorLayout:
+                size_hint_y: .2
+                BoxLayout:
+                    size_hint: None, None
+                    size: self.minimum_size
+                    spacing: 10
+                    RoundedButton:
+                        text: 'Clear'
+                        on_release: app.clear_add()
+                    RoundedButton:
+                        text: 'Add'
+                        on_release: app.add_word()
+
+
+<TextInput>:
+    background_color: third_color
+    color: accent_color
+    cursor_color: accent_color
+    background_active: ''
+    background_normal: ''
+    background_disabled_normal: ''
+    foreground_color: accent_color
+    disabled_foreground_color: third_color
+
+<BackgroundColor@Widget>:
+    bg_color: None
+    canvas.before:
+        Color:
+            rgb: root.bg_color if root.bg_color else hex(sec_color)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<Tab@TabbedPanelItem>:
+    background_normal: ''
+    background_down: ''
+    background_color: {'normal': main_color, 'down': third_color}[self.state]
+
+<StripLayout>:
+    padding: 0
+    canvas.before:
+        Color:
+            rgb: hex(sec_color)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<BoxLayoutCanvas@BoxLayout+BackgroundColor>
+<AnchorLayoutCanvas@AnchorLayout+BackgroundColor>
+<LabelCanvas@Label+BackgroundColor>:
+    color: complement_color
+    font_size: 14
+
+<RoundedToggleButton@ToggleButton+RoundedButton>
+
+<RoundedButton@Button>:
+    size_hint: None, None
+    size: 100, 50
+    pos_hint: {'center_x': .5}
+    font_size: 14
+    color: {'normal': complement_color, 'down': accent_color}[self.state]
+    text_size: self.size
+    valign: 'center'
+    halign: 'center'
+    padding: 10, 0
+    background_color: (1, 1, 1, 0)
+    background_normal: ''
+    background_down: ''
+    radius: 20
+
+    canvas.before:
+        Color:
+            rgba: {'normal': (0, 0, 0, 0), 'down': hex(third_color)}[root.state]
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: (root.radius,)
+        Color:
+            rgb: {'normal': hex(complement_color), 'down': hex(accent_color)}[root.state]
+        Line:
+            width: 1
+            rounded_rectangle: self.x, self.y, self.width, self.height, root.radius
